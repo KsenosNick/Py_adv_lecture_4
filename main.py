@@ -1,5 +1,7 @@
 import json
 import re
+import hashlib
+
 
 class CountryIterator:
 	host = 'https://en.wikipedia.org/wiki'
@@ -25,5 +27,29 @@ class CountryIterator:
 		return self.country_dict
 
 
-for country in CountryIterator("countries.json", "text_1.txt"):
-	print(country)
+path_file = 'countries.json'
+write_file = 'countries.txt'
+
+
+def hash_gen(path):
+	with open(path) as file:
+		json_data = json.load(file)
+		for string in json_data:
+			str_hash = hashlib.md5(json.dumps(string).encode()).hexdigest()
+			yield str_hash
+
+
+def get_countries():
+	for country in CountryIterator(path_file, write_file):
+		pass
+
+
+def get_hash():
+	for str_hash in hash_gen(path_file):
+		print(str_hash)
+
+
+if __name__ == '__main__':
+	get_hash()
+	get_countries()
+
